@@ -1,7 +1,7 @@
 import { useState } from "react"
 import {View, Image, StatusBar, Alert} from "react-native"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
-import { Link } from "expo-router"
+import { Link, Redirect } from "expo-router"
 import { useBadgeStore } from "@/store/badge-strore"
 
 import { api } from "@/server/api"
@@ -37,6 +37,10 @@ export default function Home(){
             Alert.alert("Ingresso", "Ingresso não encontrado")
         }
 
+    }
+
+    if(badgeStore.data?.checkInURL){
+        return <Redirect href={"/ticket"}/>
     }
 
     return (

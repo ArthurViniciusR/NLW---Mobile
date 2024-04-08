@@ -5,6 +5,7 @@ import { Link, router } from "expo-router"
 import axios from "axios"
 
 import { api } from "@/server/api"
+import { useBadgeStore } from "@/store/badge-strore"
 
 import { Input } from "@/components/input"
 import { Button } from "@/components/button"
@@ -18,6 +19,7 @@ export default function Register(){
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [isLoading, setIsLoading] = useState(false)
+    const badgeStore = useBadgeStore()
 
     async function handleRegister(){
         try{
@@ -34,6 +36,13 @@ export default function Register(){
             })
 
             if(registerResponse.data.attendeeId){
+
+                const badResponse = await api.get(
+                    `/attendees/${registerResponse.data.attendeeId}/badge`
+                )
+
+                badgeStore.save(badResponse.data.badge)
+
                 Alert.alert("Inscrição", "Inscrição realizado com sucesso", [
                     {text: "OK", onPress: () => router.push("/ticket")},
                 ])
